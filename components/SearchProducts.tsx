@@ -24,7 +24,7 @@ export default function SearchProducts() {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="border border-gray-300 rounded-l px-4 py-2 w-full"
             />
-            <button type="submit" className="bg-blue-500 mx-2 text-white rounded-r px-4 py-2">
+            <button type="submit" className="bg-violet-800 hover:gb-violet-400 cursor-pointer mx-2 text-white rounded-r px-4 py-2">
                 Buscar
             </button>
         </form>

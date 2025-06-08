@@ -1,8 +1,7 @@
 import { type NextRequest } from 'next/server'
 import { updateSession } from '@/utils/supabase/middleware'
 
-export async function middleware(request: NextRequest) {
-  console.log("Cookies en el middleware:", request.cookies.getAll())
+export async function middleware(request: NextRequest) { 
   return await updateSession(request)
 }
 

@@ -1,20 +1,31 @@
 import React from 'react';
 import './styles/globals.css';
 import Navbar from '@/components/Navbar';
+import { Kaushan_Script } from "next/font/google";
+import CartSidebar from '@/components/cart';
+import { createClient } from "@/utils/supabase/server";
 
 export const metadata = {
     title: 'Alquimara',
     description: 'Tu tienda de productos naturales y orgánicos',
 };
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+const great = Kaushan_Script({
+    subsets: ["latin"],
+    weight: '400'
+});
+
+export default async function Layout({ children }: { children: React.ReactNode }) {
     const currentYear = new Date().getFullYear(); // Calcular el año en el servidor
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser();
 
     return (
-        <html lang="es" className="h-full">
-            <body className="flex flex-col min-h-screen bg-gray-50">
-                <Navbar />
-                <main className="pt-36 flex-1  ">{children}</main>
+        <html lang="es" className={`h-full`}>
+            <body className={`flex flex-col min-h-screen ${great.className} text-l`}>
+                <Navbar user={user} />
+                <main className="pt-36 flex-1 bg-[#fff2f2]">{children}</main>
+                <CartSidebar user={user} />
                 <footer className="bg-gray-800 text-white py-4 text-center">
                     &copy; {currentYear} Alquimara. Todos los derechos reservados.
                 </footer>

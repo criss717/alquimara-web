@@ -3,25 +3,27 @@ import React from "react";
 import SearchProducts from "./SearchProducts";
 import { signOutAction } from "@/app/actions";
 import Image from "next/image";
-import { createClient } from "@/utils/supabase/server";
+import type { User } from "@supabase/supabase-js";
+import LocalGroceryStoreIcon from '@mui/icons-material/LocalGroceryStore';
 
-const Navbar = async () => {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser();
+type NavbarProps = {
+    user: User | null;
+}
+
+const Navbar = async ({ user }: NavbarProps) => {
     const userName = user?.user_metadata?.name.split(' ')[0] || ''
-
     return (
-        <nav className="bg-purple-900 grid grid-cols-12 py-3 text-white fixed top-0 left-0 w-full z-50 h-36 shadow-2xl">
-            <div className="mx-auto col-span-3 px-4 flex  items-center">
+        <nav className="bg-[#1f1f1f] grid grid-cols-12 overflow-auto text-white fixed top-0 left-0 w-full z-50 h-[100px] shadow-2xl">
+            <div className="col-span-4 flex items-center mx-4">
                 <Image
-                    src="/logo A (alquimara) final sin fondo.png"
+                    src="/Nombre logo pagina web sin fondo.png"
                     alt="Logo"
-                    width={120}
-                    height={120}
-                    className="object-cover transition-transform duration-300 hover:scale-105 cursor-pointer"
+                    width={150}
+                    height={150}
+                    className="object-contain transition-transform duration-300 hover:scale-105 cursor-pointer"
                 />
                 <div className="flex flex-col ml-2">
-                    <div className="text-2xl font-extrabold">
+                    <div className="text-l font-extrabold">
                         <Link href="/">Hola, {userName} </Link>
                     </div>
                     <p className="font-bold">Jabones Artesanales</p>
@@ -32,7 +34,7 @@ const Navbar = async () => {
                     <SearchProducts />
                 </div>
             </div>
-            <div className="mx-auto col-span-5 px-4 flex items-center justify-center">
+            <div className="mx-auto col-span-4 px-4 flex items-center justify-center">
                 <ul className="flex space-x-6 justify-center">
                     <li>
                         <Link
@@ -40,6 +42,14 @@ const Navbar = async () => {
                             className="hover:text-gray-300 transition duration-300"
                         >
                             Productos
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            href="/carrito"
+                            className="hover:text-gray-300 transition duration-300"
+                        >
+                            <LocalGroceryStoreIcon />
                         </Link>
                     </li>
                     <li>
