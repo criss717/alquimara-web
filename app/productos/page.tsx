@@ -4,31 +4,38 @@ import { createClient } from '@/utils/supabase/server';
 export default async function ProductosPage() {
   const supabase = await createClient();
 
-  // Obtén la lista de imágenes del bucket
-  const { data: files, error } = await supabase.storage
-    .from('imagenes-jabones')
-    .list('', { limit: 100 }); // Puedes ajustar el límite según tus necesidades
+  // Obténer los productos
+  const { data: productos, error } = await supabase
+    .from('productos')
+    .select('*');
 
   if (error) {
     console.error('Error obteniendo las imágenes:', error);
     return <div>Error al cargar las imágenes</div>;
   }
-  // Genera URLs públicas para las imágenes
-  const imageUrls = files.map((file) =>
-    supabase.storage.from('imagenes-jabones').getPublicUrl(file.name).data.publicUrl
-  );
-  console.log('imageUrls', imageUrls);
+  // Lista de productos con la url de la imagen
+  const productosConImagenes = productos.map((producto) => ({
+    ...producto,
+    imageUrl: supabase.storage
+      .from('imagenes-jabones')
+      .getPublicUrl(producto.image_path).data.publicUrl,
+  }));
+
+  console.log('Productos con imágenes:', productosConImagenes);
 
   return (
     <div className="p-6">
       <h1 className="text-4xl font-bold">Lista de Productos</h1>
       <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-        {imageUrls.map((url, index) => (
-          <div key={index} className="w-full h-full">
+        {productosConImagenes.map((producto, index) => (
+          <div key={producto.imageUrl + index} className="w-full h-full">
             <CardProduct
-              imageUrl={url}
-              productName={`Producto ${index + 1}`}
-              productPrice={Math.floor(Math.random() * 100) + 1} // Precio aleatorio entre 1 y 100
+              imageUrl={producto.imageUrl}
+              productName={producto.name}
+              productPrice={producto.price}
+              id={producto.id}
+              description={producto.description}
+              stock={producto.stock}
             />
           </div>
         ))}
