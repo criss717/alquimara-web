@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware"; // Importa persist para almacenar el estado en localStorage
 import { saveCartToSupabase, loadCartFromSupabase } from "@/utils/supabase/cartSupabase";
-import CartItem from "@/types/cart";
+import {CartItem} from "@/types/cart";
 
 type CartState = {
     cart: CartItem[];
@@ -23,11 +23,11 @@ export const useCartStore = create<CartState>()(
             showCart: false,
             addToCart: (item) =>
                 set((state) => {
-                    const existing = state.cart.find((i) => i.productName === item.productName);
+                    const existing = state.cart.find((i) => i.id === item.id);
                     let newCart;
                     if (existing) {
                         newCart = state.cart.map((i) =>
-                            i.productName === item.productName
+                            i.id === item.id
                                 ? { ...i, quantity: i.quantity + 1 }
                                 : i
                         );
@@ -40,16 +40,16 @@ export const useCartStore = create<CartState>()(
                 }),
             substractToCart: (item) =>
                 set((state) => {
-                    const existing = state.cart.find((i) => i.productName === item.productName);
+                    const existing = state.cart.find((i) => i.id === item.id);
                     let newCart = state.cart;
                     if (existing && existing.quantity > 1) {
                         newCart = state.cart.map((i) =>
-                            i.productName === item.productName
+                            i.id === item.id
                                 ? { ...i, quantity: i.quantity - 1 }
                                 : i
                         );
                     } else if (existing && existing.quantity === 1) {
-                        newCart = state.cart.filter((i) => i.productName !== item.productName);
+                        newCart = state.cart.filter((i) => i.id !== item.id);
                     }
                     // Sincroniza después de actualizar el carrito
                     setTimeout(() => get().syncCartToSupabase(), 0);

@@ -1,5 +1,5 @@
 import { createClient } from "@/utils/supabase/client";
-import CartItem from "@/types/cart";
+import {CartItem} from "@/types/cart";
 
 export async function saveCartToSupabase(userId: string, cart: CartItem[]) {
   const supabase = createClient();

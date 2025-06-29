@@ -1,17 +1,16 @@
 import { createClient } from '@/utils/supabase/server';
 import Image from 'next/image';
+import AddToCartButton from '@/components/ui/addToCartButton';
 
-export default async function ProductDetail({ params }: { params: { productId: string } }) {
-    const { productId } = params;
-    console.log(params);
-
+export default async function ProductDetail({ params }: { params: { slug: string } }) {
+    const { slug } = await params;
     const supabase = await createClient();
 
-    // Obtener el producto por ID
+    // Obtener el producto por slug
     const { data: product, error } = await supabase
         .from('productos')
         .select('*')
-        .eq('id', productId)
+        .eq('slug', slug)
         .single();
 
     if (error) {
@@ -21,14 +20,14 @@ export default async function ProductDetail({ params }: { params: { productId: s
 
     return (
         <div className="p-6">
-            <h1 className="text-4xl font-bold">{product.name}</h1>           
+            <h1 className="text-4xl font-bold">{product.name}</h1>
             <div className="mt-4">
                 <Image
                     width={250}
                     height={250}
                     src={supabase.storage.from('imagenes-jabones').getPublicUrl(product.image_path).data.publicUrl}
                     alt={product.name}
-                   
+
                 />
             </div>
             <div className="mt-4">
@@ -37,10 +36,9 @@ export default async function ProductDetail({ params }: { params: { productId: s
                 <p className="text-xl font-bold">{product.price}€</p>
                 <p className="text-sm text-gray-600">Stock: {product.stock}</p>
             </div>
-            <button className="mt-4 px-4 py-2 bg-violet-800 hover:bg-violet-400 text-white rounded">
-                Añadir al Carrito
-            </button>
-
+           <AddToCartButton            
+                id={product.id}               
+            />
         </div>
     );
 }

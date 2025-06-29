@@ -1,10 +1,15 @@
-export default interface CartItem {
-    productName: string;
-    productPrice: number;
+export interface CartItem {    
+    id: string;    
+    quantity : number; // Añadido para manejar la cantidad en el carrito
+}
+
+export interface CartCompleto {
+    imageUrl: string;
+    name: string;
+    price: number;
     id: string;
     description?: string;
     stock?: number;
-    imageUrl: string;
-    quantity: number;
-    shown?: boolean;
+    slug: string;
+    quantity: number; // Añadido para manejar la cantidad en el carrito
 }

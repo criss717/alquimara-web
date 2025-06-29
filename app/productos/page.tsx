@@ -31,11 +31,12 @@ export default async function ProductosPage() {
           <div key={producto.imageUrl + index} className="w-full h-full">
             <CardProduct
               imageUrl={producto.imageUrl}
-              productName={producto.name}
-              productPrice={producto.price}
+              name={producto.name}
+              price={producto.price}
               id={producto.id}
               description={producto.description}
               stock={producto.stock}
+              slug= {producto.slug}
             />
           </div>
         ))}
