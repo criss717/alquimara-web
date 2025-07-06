@@ -2,8 +2,8 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import CardProductProps  from "@/types/CardProductProps"
 import AddToCartButton from "./ui/addToCartButton";
+import CardProductProps from "@/types/CardProductProps";
 
 export default function CardProduct({ imageUrl, name, price, id, slug }: CardProductProps) {
    

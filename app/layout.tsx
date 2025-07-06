@@ -2,7 +2,7 @@ import React from 'react';
 import './styles/globals.css';
 import Navbar from '@/components/Navbar';
 import { Kaushan_Script } from "next/font/google";
-import CartSidebar from '@/components/cart';
+import CartSidebar from '@/components/CartSidebar';
 import { createClient } from "@/utils/supabase/server";
 
 export const metadata = {

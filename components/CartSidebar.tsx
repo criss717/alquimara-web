@@ -1,7 +1,6 @@
 "use client";
 import { useCartStore } from "@/store/cartStore";
 import Image from "next/image";
-import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import type { User } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
@@ -9,6 +8,7 @@ import mergeCarts from "@/utils/cart/mergeCarts";
 import { createClient } from "@/utils/supabase/client";
 import {CartCompleto} from "@/types/cart";
 import Link from "next/link";
+import CantidadComponent from "./cantidadComponent";
 
 type CartProps = {
     user: User | null;
@@ -17,9 +17,7 @@ type CartProps = {
 export default function CartSidebar({ user }: CartProps) {
     const cart = useCartStore((state) => state.cart);
     const showCart = useCartStore((state) => state.showCart);
-    const showCartFunction = useCartStore((state) => state.showCartFunction);
-    const addToCart = useCartStore((state) => state.addToCart);
-    const substractToCart = useCartStore((state) => state.substractToCart);
+    const showCartFunction = useCartStore((state) => state.showCartFunction);   
     const syncCartToSupabase = useCartStore((state) => state.syncCartToSupabase);
     const setUserId = useCartStore((state) => state.setUserId);
     const loadCartFromSupabase = useCartStore((state) => state.loadCartFromSupabase);
@@ -96,32 +94,7 @@ export default function CartSidebar({ user }: CartProps) {
                                 />
                             </Link>
                             <span>{item.price} €</span>
-                            <div className="flex items-center justify-between w-full mb-2">
-                                {item.quantity < 2 ?
-                                    <button
-                                        onClick={() => substractToCart(item)}
-                                        className="text-red-500 hover:text-red-700 transition duration-300 cursor-pointer"
-                                    >
-                                        <RemoveShoppingCartIcon />
-                                    </button>
-                                    : <button
-                                        onClick={() => substractToCart(item)}
-                                        className="text-red-500 hover:text-red-700 transition duration-300 cursor-pointer text-bold text-xl"
-                                    >
-                                        -
-                                    </button>
-                                }
-
-                                <span className="font-bold">{item.quantity}</span>
-                                <button
-                                    onClick={() => {
-                                        addToCart({ id: item.id });
-                                    }}
-                                    className="text-violet-500 hover:text-violet-700 transition duration-300 text-bold text-2xl cursor-pointer"
-                                >
-                                    +
-                                </button>
-                            </div>
+                            <CantidadComponent item={item} />
                         </li>
                     ))}
                 </ul>
