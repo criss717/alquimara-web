@@ -10,7 +10,7 @@ export default function AddToCartButton({ id }: Omit<CartItem, "quantity">) {
     const showCartFunction = useCartStore((state) => state.showCartFunction);
     const syncCartToSupabase = useCartStore((state) => state.syncCartToSupabase);
 
-    const handleAddToCart = async (e: React.MouseEvent) => {
+    const handleAddToCart = async (e: React.MouseEvent) => {        
         e.stopPropagation(); // Evita que el click burbujee al Link
         e.preventDefault();  // Evita la navegación del Link si el botón está dentro
         setIsLoading(true);

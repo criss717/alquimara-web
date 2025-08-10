@@ -1,12 +1,12 @@
 import { createClient } from "@/utils/supabase/client";
-import {CartItem} from "@/types/cart";
+import { CartItem } from "@/types/cart";
 
 export async function saveCartToSupabase(userId: string, cart: CartItem[]) {
-  const supabase = createClient();
+  const supabase = createClient(); 
   const { error } = await supabase
     .from("carts")
     .upsert([{ user_id: userId, items: cart }], { onConflict: "user_id" });
-  return error;
+  return error;  
 }
 
 export async function loadCartFromSupabase(userId: string) {

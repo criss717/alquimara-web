@@ -2,17 +2,38 @@ import { CartCompleto } from "@/types/cart";
 import Image from "next/image";
 import Link from "next/link";
 import CantidadComponent from "./cantidadComponent";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
 
-export default function CartCard({ productCart }: { productCart: CartCompleto }) {
+export default function CartCard({
+    productCart,
+    seleccionado,
+    onSeleccionar,
+}: {
+    productCart: CartCompleto,
+    seleccionado: boolean,
+    onSeleccionar: ((id: string, checked: boolean) => void )| null
+}) {
     return (
         <div className="w-full h-[200px] border-b-[1px] p-2 flex items-center">
+            <div className={`${!onSeleccionar ? 'hidden' : ''} `}>
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={seleccionado}
+                            onChange={e => onSeleccionar ? onSeleccionar(productCart.id, e.target.checked) : null}
+                            sx={{ '&.Mui-checked': { color: '#7C3AED' } }}
+                        />
+                    }
+                    label=""                
+                />
+            </div>
             <Link className="w-[200px] h-[200px] flex items-center justify-center" href={`/productos/${encodeURIComponent(productCart.slug)}`}>
                 <Image
                     src={productCart.imageUrl}
                     alt={productCart.name}
                     width={180}
                     height={180}
-                    className="object-cover"
                 />
             </Link>
             <div className="self-start flex flex-col px-2 flex-1 justify-center py-6">
@@ -22,10 +43,10 @@ export default function CartCard({ productCart }: { productCart: CartCompleto })
                 {productCart.stock ? <p className="text-sm text-gray-600 mb-2">{`Stock: ${productCart.stock}`}</p> : null}
                 <p className="text-sm text-gray-600 mb-2">{productCart.description}</p>
                 <ol className="list-disc pl-5 mb-2">
-                    {productCart?.properties.length && 
+                    {productCart?.properties.length &&
                         productCart.properties.map((property, index) => (
-                        <li key={index} className="text-sm text-gray-600 mb-2">{property}</li>
-                    ))}
+                            <li key={index} className="text-sm text-gray-600 mb-2">{property}</li>
+                        ))}
                 </ol>
             </div>
             <div className="w-[80px] self-start">

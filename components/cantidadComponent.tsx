@@ -10,7 +10,7 @@ export default function CantidadComponent({
     const addToCart = useCartStore((state) => state.addToCart);
     const substractToCart = useCartStore((state) => state.substractToCart);
     return (
-        <div className="flex items-center justify-between w-full mb-2">
+        <div className="flex items-center justify-between w-full mb-2 pr-4">
             {item.quantity < 2 ?
                 <button
                     onClick={() => substractToCart(item)}

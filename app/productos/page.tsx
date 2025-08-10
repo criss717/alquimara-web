@@ -20,9 +20,6 @@ export default async function ProductosPage() {
       .from('imagenes-jabones')
       .getPublicUrl(producto.image_path).data.publicUrl,
   }));
-
-  console.log('Productos con imágenes:', productosConImagenes);
-
   return (
     <div className="p-6">
       <h1 className="text-4xl font-bold">Lista de Productos</h1>
@@ -36,7 +33,7 @@ export default async function ProductosPage() {
               id={producto.id}
               description={producto.description}
               stock={producto.stock}
-              slug= {producto.slug}
+              slug={producto.slug}
             />
           </div>
         ))}

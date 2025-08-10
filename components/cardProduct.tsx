@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import AddToCartButton from "./ui/addToCartButton";
-import CardProductProps from "@/types/CardProductProps";
+import CardProductProps from "@/types/cardProductProps";
 
 export default function CardProduct({ imageUrl, name, price, id, slug }: CardProductProps) {
    
@@ -15,7 +15,8 @@ export default function CardProduct({ imageUrl, name, price, id, slug }: CardPro
                         src={imageUrl}
                         alt={name}
                         fill
-                        className="object-cover rounded-full p-3"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
+                        className="rounded-full p-3"
                     />
                 </div>
                 <h3 className="text-lg font-bold mt-2">{name}</h3>
