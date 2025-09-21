@@ -3,14 +3,15 @@ import { useCartStore } from "@/store/cartStore";
 import Image from "next/image";
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import type { User } from "@supabase/supabase-js";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import mergeCarts from "@/utils/cart/mergeCarts";
 import { createClient } from "@/utils/supabase/client";
 import { CartCompleto } from "@/types/cart";
 import Link from "next/link";
 import CantidadComponent from "./cantidadComponent";
 import { usePathname } from "next/navigation";
-import { fetchProductos } from "@/utils/cart/fechProducts";
+import SidebarCartSkeleton from './SidebarCartSkeleton';
+import { load } from "@/utils/utils";
 
 type CartProps = {
     user: User | null;
@@ -25,8 +26,10 @@ export default function CartSidebar({ user }: CartProps) {
     const loadCartFromSupabase = useCartStore((state) => state.loadCartFromSupabase);
     const supabase = createClient();
     const [productos, setProductos] = useState<CartCompleto[]>([]);
+    const [loading, setLoading] = useState(false);
+    const prevIdsRef = useRef<string>("");
     const url = usePathname();
-    //console.log("URL actual:", url);
+
     useEffect(() => {
         //asegurar que solo hace merge al hacer loguin por primera vez
         //conseguimos el id del usuario del local storage
@@ -48,12 +51,8 @@ export default function CartSidebar({ user }: CartProps) {
         };
     }, [user?.id, setUserId, syncCartToSupabase, loadCartFromSupabase, showCartFunction]);
 
-    useEffect(() => {       
-        if (cart.length > 0) {
-            fetchProductos(supabase, cart, setProductos,null);
-        } else {
-            setProductos([]);
-        }
+    useEffect(() => {
+        load(cart, setProductos, prevIdsRef, setLoading, supabase);
     }, [cart, supabase]);
 
     return (
@@ -69,9 +68,15 @@ export default function CartSidebar({ user }: CartProps) {
                     </button>
 
                 </div>
-                <p className="text-gray-600 font-bold text-center">
-                    {productos.reduce((acc, item) => acc + (item.price * item.quantity), 0).toFixed(2)}€
-                </p>
+                {
+                    productos.length === 0 ? (
+                        <div className="animate-pulse h-6 bg-gray-200 rounded w-1/5" />
+                    ) : (
+                        <p className="text-gray-600 font-bold text-center">
+                            {productos.reduce((acc, item) => acc + (item.price * item.quantity), 0).toFixed(2)}€
+                        </p>
+                    )
+                }
                 <Link href="/carrito">
                     <button
                         className="border border-violet-500 text-violet-500 hover:bg-violet-500 hover:text-white transition duration-300 cursor-pointer py-1 px-2 rounded"
@@ -80,13 +85,15 @@ export default function CartSidebar({ user }: CartProps) {
                     </button>
                 </Link>
             </div>
-            {productos.length === 0 ? (
+            {loading ? (
+                <SidebarCartSkeleton count={cart.length} />
+            ) : productos.length === 0 ? (
                 <p>El carrito está vacío.</p>
             ) : (
                 <ul>
                     {productos.map((item) => (
                         <li key={item.name + item.price} className="mb-2 border-b-2 border-b-violet-200 w-full h-full flex flex-col justify-between items-center">
-                            <Link href={`/productos/${item.slug}`} className="w-full h-full" key={item.id}>
+                            <Link href={`/productos/${item.slug}`} className="w-full h-full flex justify-center" key={item.id}>
                                 <Image
                                     src={item.imageUrl}
                                     alt={item.name}
