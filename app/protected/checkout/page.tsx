@@ -5,10 +5,9 @@ import { useSearchParams } from 'next/navigation'
 import { useCartStore } from '@/store/cartStore'
 import { createClient } from "@/utils/supabase/client";
 import { CartCompleto } from "@/types/cart";
-
-import FormDireccionEnvio from '@/components/FormDireccionEnvio'
 import Link from 'next/link'
 import { load } from '@/utils/utils'
+import ResumenDireccion from '@/components/ResumenDireccion'
 
 const CheckoutPage = () => {
     const searchParams = useSearchParams();
@@ -18,12 +17,56 @@ const CheckoutPage = () => {
     const [productos, setProductos] = useState<CartCompleto[]>([]);
     const [loading, setLoading] = useState(true);
     const prevIdsRef = useRef<string>("");
+    const userId = useCartStore((state) => state.userId);
 
     const totalProductos = productos?.length > 0 ? productos.reduce((acc, item) => acc + (item.price * item.quantity), 0).toFixed(2) : "0.00";
     const totalEnvio = 5.99;
     const totalGeneral = (parseFloat(totalProductos) + totalEnvio).toFixed(2);
 
     const handlePay = async () => {
+        //revisar cual shipping detail esta activo
+        const { data: activeShipping, error: shippingError } = await supabase
+            .from('shipping_details')
+            .select('*')
+            .eq('user_id', userId)
+            .eq('active', true)
+            .single();
+        if (shippingError || !activeShipping) {
+            alert('Por favor, selecciona una dirección de envío antes de proceder con el pago.');
+            return;
+        }
+        // 1. Crear el pedido
+        const { data: order, error: orderError } = await supabase
+            .from('orders')
+            .insert([{
+                user_id: userId,
+                status: 'pending',
+                total_amount: totalProductos,
+                shipping_cost: totalEnvio,   
+                shipping_id: activeShipping.id             
+            }])
+            .select()
+            .single();
+
+        if (orderError || !order) {
+            throw new Error('Error al crear el pedido');
+        }
+        //2. Guardar items del pedido
+        const orderItems = productos.map(item => ({
+            order_id: order.id,
+            producto_id: item.id,
+            quantity: item.quantity,
+            price_at_time: item.price
+        }));
+
+        const { error: itemsError } = await supabase
+            .from('order_items')
+            .insert(orderItems);
+
+        if (itemsError) {
+            throw new Error('Error al guardar los items del pedido');
+        }
+
         const res = await fetch("/api/checkout", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -33,8 +76,9 @@ const CheckoutPage = () => {
         if (data.url) {
             window.location.href = data.url; // Redirige a Stripe Checkout
 
-            //guardamos en el localstorage los id seleccionados para posteriormente borrarlos de el carrito del usuario
+            //guardamos en el localstorage los id seleccionados y el id del pedido para posteriormente borrarlos de el carrito del usuario
             localStorage.setItem("seleccionados", JSON.stringify(seleccionados));
+            localStorage.setItem("orderId", order.id);
         }
     };
 
@@ -45,12 +89,9 @@ const CheckoutPage = () => {
     return (
         <div className="flex flex-col w-full">
             <div className="flex justify-center min-h-screen bg-gray-100 p-4">
-                <div className="flex-col flex-1 flex gap-4">
-                    <h2 className="text-lg font-semibold mb-4">
-                        Indica tu dirección de envío
-                    </h2>
-                    <FormDireccionEnvio />
-                    <h1 className="text-2xl font-bold mb-4">Carrito de Compras</h1>
+                <div className="flex-col flex-1 flex gap-4">                                     
+                    <ResumenDireccion />
+                    <h1 className="text-2xl font-bold mb-4">Productos Seleccionados</h1>
                     <Cesta
                         productos={productos}
                         seleccionados={[]}

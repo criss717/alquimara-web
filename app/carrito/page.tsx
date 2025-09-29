@@ -17,7 +17,7 @@ export default function CarritoPage() {
     const searchParams = useSearchParams();
     const success = searchParams.get("success");
     const canceled = searchParams.get("canceled");
-    const clearCart = useCartStore((state) => state.clearCart);    
+    const clearCart = useCartStore((state) => state.clearCart);
 
     const [loading, setLoading] = useState(true);
     const prevIdsRef = useRef<string>("");
@@ -29,8 +29,22 @@ export default function CarritoPage() {
     useEffect(() => {
         if (success) {
             const seleccionados = JSON.parse(localStorage.getItem("seleccionados") || "[]");
+            const orderId = localStorage.getItem("orderId");
             clearCart(seleccionados);
             setProductos([]);
+
+            //poner como pagado el estado del pedido (tabla orders)
+            const updateOrder = async (orderId: string | null) => {
+                const { error: updateError } = await supabase
+                    .from('orders')
+                    .update({ status: 'paid' })
+                    .eq('id', orderId);
+
+                if (updateError) {
+                    console.error('Error updating order status:', updateError);
+                }
+            }
+            updateOrder(orderId);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [success, canceled]);
@@ -58,7 +72,7 @@ export default function CarritoPage() {
                         skeletonCount={cart.length}
                     />
                 </div>
-                <div className="w-[300px] self-start text-center flex flex-col gap-1 justify-center items-center">
+                <div className={`w-[300px] self-start text-center flex flex-col gap-1 justify-center items-center ${productos.length === 0 && "hidden"}`}>
                     <h2 className="font-bold text-xl">Resumen de Compra</h2>
                     {
                         productos.length === 0 ? (
@@ -68,7 +82,7 @@ export default function CarritoPage() {
                                 Productos: {productosSeleccionados.reduce((acc, item) => acc + (item.price * item.quantity), 0).toFixed(2)}€
                             </p>
                         )
-                    }                
+                    }
                     <Link href={{
                         pathname: "/protected/checkout",
                         query: { seleccionados: seleccionados.join(",") }
