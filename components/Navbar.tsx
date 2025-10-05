@@ -18,17 +18,19 @@ const Navbar = ({ user }: NavbarProps) => {
     return (
         <nav className="bg-[#1f1f1f] grid grid-cols-12 overflow-hidden text-white fixed top-0 left-0 w-full z-50 h-[100px] shadow-2xl">
             <div className="col-span-4 flex items-center mx-4">
-                <Image
-                    src="/Nombre logo pagina web sin fondo.png"
-                    alt="Logo"
-                    width={125}
-                    height={125}
-                    priority
-                    className="transition-transform duration-300 hover:scale-105 cursor-pointer w-auto"
-                />
+                <Link href="/">
+                    <Image
+                        src="/Nombre logo pagina web sin fondo.png"
+                        alt="Logo"
+                        width={125}
+                        height={125}
+                        priority
+                        className="transition-transform duration-300 hover:scale-105 cursor-pointer w-auto"
+                    />
+                </Link>
                 <div className="flex flex-col ml-2">
                     <div className="text-l font-extrabold">
-                        <Link href="/">Hola, {userName} </Link>
+                        Hola, {userName}
                     </div>
                     <p className="font-bold">Jabones Artesanales</p>
                 </div>

@@ -13,7 +13,7 @@ export default async function Home() {
                 <p className="mt-4 text-lg">Tu tienda de jabones artesanales</p>
                 <p className="mt-4 text-lg">Explora nuestros productos y descubre la magia de la naturaleza.</p>
             </div>
-            <ChatAstrologico />
+            <ChatAstrologico  />
         </main>
     );
 }

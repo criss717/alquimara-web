@@ -31,7 +31,7 @@ export default function CartSidebar({ user }: CartProps) {
     const url = usePathname();
 
     useEffect(() => {
-        //asegurar que solo hace merge al hacer loguin por primera vez
+        //asegurar que solo hace merge al hacer login por primera vez
         //conseguimos el id del usuario del local storage
         const IdUserLocal = useCartStore.getState().userId;
         if (user?.id && user.id !== IdUserLocal) {

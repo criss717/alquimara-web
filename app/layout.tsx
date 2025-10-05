@@ -1,7 +1,7 @@
 import React from 'react';
 import './styles/globals.css';
 import Navbar from '@/components/Navbar';
-import { Kaushan_Script } from "next/font/google";
+import { Comic_Neue } from "next/font/google";
 import CartSidebar from '@/components/CartSidebar';
 import { createClient } from "@/utils/supabase/server";
 
@@ -10,7 +10,7 @@ export const metadata = {
     description: 'Tu tienda de productos naturales y orgánicos',
 };
 
-const great = Kaushan_Script({
+const great = Comic_Neue({
     subsets: ["latin"],
     weight: '400'
 });
