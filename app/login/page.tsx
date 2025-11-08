@@ -8,7 +8,7 @@ export default async function LoginPage() {
   const { data: { session } } = await supabase.auth.getSession();
   if (session) {
     return (
-      redirect("/protected")
+      redirect("/")
     );
   }
   return (

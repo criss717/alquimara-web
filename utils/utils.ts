@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { CartCompleto, CartItem } from "@/types/cart";
-import { fetchProductos } from "@/utils/cart/fechProducts";
+import { fetchProductos } from "@/utils/cart/fetchProducts";
 import { SupabaseClient } from "@supabase/supabase-js";
 
 /**

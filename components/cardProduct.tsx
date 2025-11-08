@@ -9,8 +9,8 @@ export default function CardProduct({ imageUrl, name, price, id, slug }: CardPro
    
     return (
         <Link href={`/productos/${encodeURIComponent(slug)}`}>
-            <div className="w-full h-100 border rounded-xl p-2 flex flex-col items-center justify-center">
-                <div className="w-64 h-64 relative">
+            <div className="w-full h-100 border rounded-xl p-2 flex flex-col items-center justify-center hover:shadow-lg transition-shadow hover:scale-105 duration-200">
+                <div className="w-64 h-64 relative hover:scale-105 transition-transform duration-200">
                     <Image
                         src={imageUrl}
                         alt={name}

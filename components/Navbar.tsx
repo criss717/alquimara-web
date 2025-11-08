@@ -32,7 +32,7 @@ const Navbar = ({ user }: NavbarProps) => {
                     <div className="text-l font-extrabold">
                         Hola, {userName}
                     </div>
-                    <p className="font-bold">Jabones Artesanales</p>
+                    <p className="font-bold">Magia, astrología y bienestar</p>
                 </div>
             </div>
             <div className=" mx-auto col-span-4 px-4 flex items-center justify-between">

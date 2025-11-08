@@ -21,9 +21,8 @@ export default async function ProductosPage() {
       .getPublicUrl(producto.image_path).data.publicUrl,
   }));
   return (
-    <div className="p-6">
-      <h1 className="text-4xl font-bold">Lista de Productos</h1>
-      <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+    <div className="p-6 w-full">      
+      <div className="mt-2 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
         {productosConImagenes.map((producto, index) => (
           <div key={producto.imageUrl + index} className="w-full h-full">
             <CardProduct

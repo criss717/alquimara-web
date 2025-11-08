@@ -1,3 +1,4 @@
+import CardProductProps from "@/types/cardProductProps";
 import { CartCompleto, CartItem } from "@/types/cart";
 import { SupabaseClient } from "@supabase/supabase-js";
 
@@ -38,3 +39,27 @@ export const fetchProductos = async function (
     if (!error) setProductos(dataCompleta);
     else setProductos([]);
 };
+
+export async function fetchProductsForCarousel(supabase: SupabaseClient): Promise<CardProductProps[]> {
+  const { data, error } = await supabase
+    .from("productos")
+    .select("id, name, slug, price, description, image_path")
+    .limit(10);
+
+  if (error) {
+    console.error("Error fetching products for carousel:", error);
+    return [];
+  }
+
+  if (!data) {
+    return [];
+  }
+
+  const productsWithUrls = data.map((product) => ({
+    ...product,
+    imageUrl: supabase.storage.from('imagenes-jabones').getPublicUrl(product.image_path).data.publicUrl,
+  }));
+
+  return productsWithUrls as unknown as CardProductProps[];
+}
+
