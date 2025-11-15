@@ -16,7 +16,7 @@ const Navbar = ({ user }: NavbarProps) => {
     const userName = user?.user_metadata?.name?.split(' ')[0] || ''
     const setUserID = useCartStore((state) => state.setUserId);
     return (
-        <nav className="bg-[#1f1f1f] grid grid-cols-12 overflow-hidden text-white fixed top-0 left-0 w-full z-50 h-[100px] shadow-2xl">
+        <nav className="bg-[#1f1f1f] grid grid-cols-12 text-white fixed top-0 left-0 w-full z-50 h-[100px] shadow-2xl">
             <div className="col-span-4 flex items-center mx-4">
                 <Link href="/">
                     <Image
