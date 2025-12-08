@@ -32,7 +32,7 @@ export default function PriceRangeSlider({ min, max, step }: { min: number; max:
   }, [minVal, maxVal]);
   // --------------------
 
-  const updateUrl = useCallback(() => {
+  const updateUrl = () => {
     const current = new URLSearchParams(Array.from(searchParams.entries()));
     const newPrices = `${minValRef.current}-${maxValRef.current}`;
     
@@ -46,8 +46,7 @@ export default function PriceRangeSlider({ min, max, step }: { min: number; max:
     const search = current.toString();
     const query = search ? `?${search}` : '';
     router.push(`${pathname}${query}`);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [min, max, pathname, router]);
+  };
 
   useEffect(() => {
     const [initialMin, initialMax] = getInitialPrices();

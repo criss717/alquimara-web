@@ -1,9 +1,10 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
-
+import HighlightOffRoundedIcon from '@mui/icons-material/HighlightOffRounded';
 import PriceRangeSlider from './PriceRangeSlider';
+import SelectComponent from './ui/select';
 
 /**
  * FilterComponent: componente cliente para manipular filtros y actualizar la URL.
@@ -42,7 +43,7 @@ export default function FilterComponent({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [category, selectedProps])
 
-    function updateUrl(params: { [k: string]: string | undefined }) {
+    const updateUrl = useCallback ((params: { [k: string]: string | undefined }) => {
         const paramsObj = new URLSearchParams(Array.from(searchParams.entries()))
         // Seteo o elimino parámetros según el valor
         Object.entries(params).forEach(([k, v]) => {
@@ -51,36 +52,46 @@ export default function FilterComponent({
         })
         const qs = paramsObj.toString()
         router.push(qs ? `${pathname}?${qs}` : pathname)
-    }
-
-    const onCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setCategory(e.target.value)
-    }
+    }, [pathname, router, searchParams])
 
     const onPropertyToggle = (prop: string) => {
         setSelectedProps((prev) => (prev.includes(prop) ? prev.filter((p) => p !== prop) : [...prev, prop]))
-    }  
+    }
 
     useEffect(() => {
-        //limpiar los filtros cuando la url esta sin parametros
+        // //limpiar los filtros cuando la url esta sin parametros
         if (!searchParams.get('categoria') && !searchParams.get('propiedades') && !searchParams.get('precios')) {
             setCategory('');
             setSelectedProps([]);
         }
+        console.log('FilterComponent useEffect ->', searchParams.toString());
+        setCategory(searchParams.get('categoria') || 'all');
+        setSelectedProps(searchParams.get('propiedades') ? searchParams.get('propiedades')!.split(',') : []);
     }, [searchParams]);
 
     return (
         <aside className="p-4 border rounded-lg shadow-md w-full md:w-64">
-            <h2 className="text-xl font-semibold mb-4">Filtros</h2>
+            <div className="flex w-full items-center justify-between">
+                <h2 className="text-xl font-semibold mb-4">Filtros</h2>
+                <HighlightOffRoundedIcon className="cursor-pointer m-0 p-0 self-start" onClick={() => {
+                    // eliminar parámetros de filtros en la URL (precios y propiedades)
+                    updateUrl({
+                        categoria: 'all',
+                        propiedades: undefined,
+                        page: '1',
+                        precios: undefined
+                    });
+                  
+                }} />
+            </div>
 
             <div className="mb-6">
-                <label className="block text-sm font-medium mb-2">Categorías</label>
-                <select value={category} onChange={onCategoryChange} className="w-full p-2 border rounded cursor-pointer">
-                    <option value="">Todas</option>
-                    {categorias.map((c) => (
-                        <option key={c} value={c}>{c}</option>
-                    ))}
-                </select>
+                <SelectComponent
+                    label="Categorías"
+                    options={[{ value: 'all', label: 'Todas' }, ...categorias.map(c => ({ value: c, label: c }))]}
+                    value={category}
+                    onChange={setCategory}
+                />
             </div>
 
             <div className="mb-6">
@@ -92,7 +103,9 @@ export default function FilterComponent({
                             type="checkbox"
                             checked={selectedProps.includes(p)}
                             onChange={() => onPropertyToggle(p)}
-                            className="mr-2 cursor-pointer"
+                            className="w-3 h-3 mr-2 rounded-sm border border-gray-300 appearance-none
+                            checked:bg-violet-600 checked:border-violet-600 cursor-pointer
+                            transition-colors"
                         />
                         <label className='cursor-pointer' htmlFor={`prop_${p}`}>{p}</label>
                     </div>
@@ -100,7 +113,7 @@ export default function FilterComponent({
             </div>
 
             <div className="mb-6">
-                <PriceRangeSlider min={precios.minPrice} max={precios.maxPrice} step={1} />
+                <PriceRangeSlider min={precios.minPrice} max={precios.maxPrice} step={1}  />
             </div>
         </aside>
     )

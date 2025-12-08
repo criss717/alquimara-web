@@ -263,6 +263,7 @@ export default function ChatAstrologico() {
             <div className="p-4 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
                 <form onSubmit={handleFormSubmit} className="flex items-center gap-3">
                     <input
+                        id="chat-input"
                         className="flex-grow px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500 text-black transition-shadow duration-200"
                         value={input}
                         placeholder="Escribe tu pregunta aquí..."

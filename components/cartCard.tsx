@@ -43,7 +43,7 @@ export default function CartCard({
                 {productCart.stock ? <p className="text-sm text-gray-600 mb-2">{`Stock: ${productCart.stock}`}</p> : null}
                 <p className="text-sm text-gray-600 mb-2">{productCart.description}</p>
                 <ol className="list-disc pl-5 mb-2">
-                    {productCart?.properties.length &&
+                    {productCart?.properties?.length &&
                         productCart.properties.map((property, index) => (
                             <li key={index} className="text-sm text-gray-600 mb-2">{property}</li>
                         ))}

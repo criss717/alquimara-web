@@ -1,12 +1,13 @@
 "use client"
 import { useCartStore } from "@/store/cartStore";
-import { useEffect, useRef, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { CartCompleto } from "@/types/cart";
 import Cesta from "@/components/cesta";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { load } from "@/utils/utils";
+import { useRouter } from 'next/navigation';
+import { useEffect, useState, useRef } from 'react';
 
 export default function CarritoPage() {
     const cart = useCartStore((state) => state.cart);
@@ -21,9 +22,16 @@ export default function CarritoPage() {
 
     const [loading, setLoading] = useState(true);
     const prevIdsRef = useRef<string>("");
+    const router = useRouter();
+    const [hasPending, setHasPending] = useState(false);
 
     useEffect(() => {
-        setSeleccionados(productos.map(p => p.id));
+        // Inicializar seleccionados sólo la primera vez que lleguen productos
+        // para evitar que cambios de cantidad vuelvan a seleccionar todos.
+        if (productos.length > 0 && seleccionados.length === 0) {
+            setSeleccionados(productos.map(p => p.id));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [productos]);
 
     useEffect(() => {
@@ -53,6 +61,20 @@ export default function CarritoPage() {
         load(cart, setProductos, prevIdsRef, setLoading, supabase);
     }, [cart, supabase]);
 
+    useEffect(() => {
+        // comprobar si existe orden pendiente
+        const checkPending = async () => {
+            try {
+                const res = await fetch('/api/orders/retake?check=true');
+                const json = await res.json();
+                setHasPending(Boolean(json.pending));
+            } catch (e) {
+                console.error('check pending error', e);
+            }
+        };
+        checkPending();
+    }, []);
+
     return (
         <div className="flex flex-col w-full">
             {success && (
@@ -73,6 +95,26 @@ export default function CarritoPage() {
                     />
                 </div>
                 <div className={`w-[300px] self-start text-center flex flex-col gap-1 justify-center items-center ${productos.length === 0 && "hidden"}`}>
+                    {hasPending && (
+                        <button
+                            onClick={async () => {
+                                try {
+                                    const res = await fetch('/api/orders/retake', { method: 'POST' });
+                                    const json = await res.json();
+                                    if (json.url) {
+                                        window.location.href = json.url;
+                                    } else {
+                                        console.error('No url returned', json);
+                                    }
+                                } catch (e) {
+                                    console.error('retake error', e);
+                                }
+                            }}
+                            className="w-full bg-yellow-500 text-black py-2 px-3 rounded mb-2 hover:bg-yellow-600 transition"
+                        >
+                            Retomar compra pendiente
+                        </button>
+                    )}
                     <h2 className="font-bold text-xl">Resumen de Compra</h2>
                     {
                         productos.length === 0 ? (

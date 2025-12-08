@@ -33,12 +33,12 @@ export default function ProductCarousel({ products }: ProductCarouselProps) {
           {products.map((product) => (
             <div key={product.id} className="flex-none w-full md:w-1/2 lg:w-1/3 xl:w-1/4 p-4">
               <Link href={`/productos/${product.slug}`} className="block bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out group">
-                <div className="relative w-full h-80 overflow-hidden">
+                <div className="relative w-full h-60 overflow-hidden">
                   <Image
                     src={product.imageUrl || '/placeholder.png'} // Asegúrate de tener una imagen de placeholder
                     alt={product.name}
                     fill
-                    style={{ objectFit: 'cover' }}
+                    style={{ objectFit: 'contain' }}
                     className="transition-transform duration-300 ease-in-out group-hover:scale-105"
                   />
                 </div>

@@ -20,9 +20,15 @@ export default function SearchProducts() {
   const [isLoading, setIsLoading] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
 
-  const debounce = (fn: (...args: any[]) => any, delay: number) => {
+  /**
+   * Función debounce que retrasa la ejecución de la función proporcionada.
+   * @param fn Función a ejecutar después del retraso.
+   * @param delay Tiempo de espera en milisegundos.
+   * @returns Función debounced.
+   */
+  const debounce = <T extends unknown[]>(fn: (...args: T) => void, delay: number) => {
     let timeoutId: NodeJS.Timeout;
-    return (...args: any) => {
+    return (...args: T) => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => fn(...args), delay);
     };
@@ -114,7 +120,7 @@ export default function SearchProducts() {
             <ul className="divide-y">
               {results.map((result) => (
                 <li key={result.href}>
-                  <button onClick={() => handleLinkClick(result.href)} className="flex w-full items-center gap-4 p-3 text-left hover:bg-gray-50">
+                  <button onClick={() => handleLinkClick(result.href)} className="flex w-full items-center gap-4 p-3 text-left hover:bg-gray-50 cursor-pointer rounded-lg">
                     {result.type === 'product' ? (
                       <Image
                         src={result.imageUrl || ''}

@@ -30,7 +30,11 @@ export default async function ProductosPage({ searchParams }: ProductsPageProps)
 
   try {
     if (categoria) {
-      query = query.eq('categoria', categoria);
+      if( categoria === 'all' ) {
+        // No filter for 'all' category
+      } else {
+        query = query.eq('categoria', categoria);
+      }
     }
     if (propiedades) {
       const propertiesArray = propiedades.split(',').map((p) => p.trim()).filter(Boolean);

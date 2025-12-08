@@ -35,13 +35,13 @@ const Navbar = ({ user }: NavbarProps) => {
                     <p className="font-bold">Magia, astrología y bienestar</p>
                 </div>
             </div>
-            <div className=" mx-auto col-span-4 px-4 flex items-center justify-between">
-                <div className="ml-2">
+            <div className=" mx-auto col-span-5 px-4 flex items-center justify-between md:w-[600px] w[300px]">
+                <div className="ml-2 w-full">
                     <SearchProducts />
                 </div>
             </div>
-            <div className="mx-auto col-span-4 px-4 flex items-center justify-center">
-                <ul className="flex space-x-6 justify-center">
+            <div className="mx-auto col-span-3 px-4 flex items-center justify-center">
+                <ul className="flex space-x-6 justify-between items-center">
                     <li>
                         <Link
                             href="/productos"
