@@ -8,6 +8,7 @@ import FormDireccionEnvio from './FormDireccionEnvio';
 
 export default function ResumenDireccion() {
     const supabase = createClient();
+    const [loadingAddresses, setLoadingAddresses] = useState<boolean>(true);
     const [shippingData, setShippingData] = useState<ShippingFull[]>([]);
     const userId = useCartStore((state) => state.userId);
     const [formVisible, setFormVisible] = useState<boolean>(false);
@@ -69,12 +70,26 @@ export default function ResumenDireccion() {
 
     useEffect(() => {
         const fetchData = async () => {
+            // Evitar hacer la consulta si no hay userId válido
+            if (!userId) {
+                setShippingData([]);
+                setLoadingAddresses(false);
+                return;
+            }
+
+            setLoadingAddresses(true);
             const { data } = await supabase.from('shipping_details')
                 .select('*')
                 .eq('user_id', userId)
 
-            if (!data) return setShippingData([]);
+            if (!data) {
+                setShippingData([]);
+                setLoadingAddresses(false);
+                return;
+            }
+
             setShippingData(data);
+            setLoadingAddresses(false);
         };
         fetchData();
     }, [supabase, userId, formVisible]);
@@ -106,16 +121,42 @@ export default function ResumenDireccion() {
                                 Añadir Nueva Dirección
                             </button>
                         </div>
-                        <div className="max-h-[500px] overflow-y-auto">
-                            {shippingData?.length && shippingData.map((direccion) => (
-                                <CardDirecciones
-                                    key={direccion.id}
-                                    direccion={direccion}
-                                    onChangeActive={handleChangeActive}
-                                    onDelete={handleDelete}
-                                    onEdit={handleEdit}
-                                />
-                            ))}
+                        <div className="max-h-[300px] overflow-y-auto">
+                            {loadingAddresses ? (
+                                // Skeletons: reproducen estructura y tamaño de CardDirecciones (h-[160px])
+                                [1,2,3].map((i) => (
+                                    <div key={i} className="border p-4 mb-4 flex h-[160px] animate-pulse">
+                                        <div className="h-full w-11/12">
+                                            <div className="h-6 bg-gray-200 rounded w-1/3 mb-3" />
+                                            <div className="h-4 bg-gray-200 rounded w-2/3 mb-2" />
+                                            <div className="h-4 bg-gray-200 rounded w-1/2 mb-2" />
+                                            <div className="h-4 bg-gray-200 rounded w-1/3 mb-2" />
+                                            <div className="h-4 bg-gray-200 rounded w-1/4" />
+                                        </div>
+                                        <div className="h-full w-1/12 items-center justify-between flex flex-col">
+                                            <div className="w-6 h-6 bg-gray-200 rounded" />
+                                            <div className="h-full w-full flex items-center justify-center gap-2">
+                                                <div className="w-6 h-6 bg-gray-200 rounded" />
+                                                <div className="w-6 h-6 bg-gray-200 rounded" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                shippingData && shippingData.length > 0 ? (
+                                    shippingData.map((direccion) => (
+                                        <CardDirecciones
+                                            key={direccion.id}
+                                            direccion={direccion}
+                                            onChangeActive={handleChangeActive}
+                                            onDelete={handleDelete}
+                                            onEdit={handleEdit}
+                                        />
+                                    ))
+                                ) : (
+                                    <div className="text-sm text-gray-500">No hay direcciones todavía.</div>
+                                )
+                            )}
                         </div>
                     </div>
                 )

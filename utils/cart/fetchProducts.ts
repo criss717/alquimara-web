@@ -43,7 +43,7 @@ export const fetchProductos = async function (
 export async function fetchProductsForCarousel(supabase: SupabaseClient): Promise<CardProductProps[]> {
   const { data, error } = await supabase
     .from("productos")
-    .select("id, name, slug, price, description, image_path")
+    .select("id, name, slug, price, description, image_path, stock") // 'stock' añadido aquí
     .limit(10);
 
   if (error) {
