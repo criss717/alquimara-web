@@ -66,8 +66,14 @@ export async function GET(): Promise<NextResponse> {
     const order = await findLatestPendingOrder(sup, userId);
     if (!order) return NextResponse.json({ pending: false });
 
-    // devolver expires_at si existe para que el cliente pueda mostrar countdown
-    return NextResponse.json({ pending: true, orderId: order.id, expires_at: order.expires_at || null });
+    // devolver expires_at y total_amount para que el cliente pueda mostrar countdown y resumen
+    return NextResponse.json({
+      pending: true,
+      orderId: order.id,
+      expires_at: order.expires_at || null,
+      total_amount: order.total_amount,
+      shipping_cost: order.shipping_cost
+    });
   } catch (e) {
     return NextResponse.json({ pending: false, error: String(e) }, { status: 500 });
   }

@@ -70,7 +70,7 @@ export default async function ProductDetail({ params }: { params: { slug: string
                 </div>
 
                 <div className="md:col-span-2">
-                    <h1 className="text-4xl font-extrabold mb-3">{product.name}</h1>
+                    <h1 className="text-2xl font-extrabold mb-3">{product.name}</h1>
                     <div className="flex items-center gap-4 mb-4">
                         <p className="text-2xl font-bold text-gray-900">{product.price}€</p>
                         <p className="text-sm text-gray-600">Stock: {product.stock}</p>

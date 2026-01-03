@@ -118,13 +118,13 @@ export default function ResumenDireccion() {
                                     setFormVisible(true);
                                 }}
                             >
-                                Añadir Nueva Dirección
+                                Nueva Dirección
                             </button>
                         </div>
                         <div className="max-h-[300px] overflow-y-auto">
                             {loadingAddresses ? (
                                 // Skeletons: reproducen estructura y tamaño de CardDirecciones (h-[160px])
-                                [1,2,3].map((i) => (
+                                [1, 2, 3].map((i) => (
                                     <div key={i} className="border p-4 mb-4 flex h-[160px] animate-pulse">
                                         <div className="h-full w-11/12">
                                             <div className="h-6 bg-gray-200 rounded w-1/3 mb-3" />

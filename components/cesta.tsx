@@ -22,7 +22,7 @@ const Cesta = ({
             {loading ? (
                 <CartSkeleton count={skeletonCount} />
             ) : productos.length === 0 ? (
-                <div className="flex flex-col items-center justify-center mt-10">
+                <div className="flex flex-col items-center justify-center mt-2">
                     <p className="text-gray-600">No hay productos en el carrito.</p>
                     <Link href="/productos">
                         <button className="bg-violet-500 text-white py-2 px-4 mt-4 rounded cursor-pointer">
