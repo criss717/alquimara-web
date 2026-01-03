@@ -6,7 +6,7 @@ import { SendHorizontal } from 'lucide-react';
 import { DefaultChatTransport, UIMessage } from 'ai';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
-import { saveChatMessages, loadChatMessages} from '@/utils/supabase/chatSupabase';
+import { saveChatMessages, loadChatMessages } from '@/utils/supabase/chatSupabase';
 import { v4 as uuidv4 } from 'uuid';
 
 /**
@@ -191,10 +191,18 @@ export default function ChatAstrologico() {
     return (
         <div className="w-full flex flex-col h-[75vh] bg-white rounded-2xl shadow-2xl border border-gray-200">
             {/* Encabezado del Chat */}
-            <div className="p-4 border-b border-gray-200">
-                <h2 className="text-xl font-semibold text-center text-gray-800">
+            <div className="p-4 border-b border-gray-200 flex flex-col sm:flex-row items-center  gap-3 bg-violet-50 rounded-t-2xl">
+                <h2 className="text-xl font-semibold text-gray-800">
                     Consulta con la Astróloga Xiomara
                 </h2>
+                <a
+                    href="https://calendar.app.google/bnkQRqVbbPw3tLX46"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-violet-500 hover:bg-violet-700 text-white text-sm font-bold px-4 py-2 rounded-full shadow-sm transition-colors flex items-center gap-2"
+                >
+                    📅 Gestionar Cita
+                </a>
             </div>
 
             {/* Contenedor de Mensajes */}
@@ -219,8 +227,8 @@ export default function ChatAstrologico() {
                                 )}
                                 <div
                                     className={`max-w-[70%] p-3 rounded-2xl text-black whitespace-pre-wrap shadow-md ${role === 'user'
-                                            ? 'bg-violet-300 rounded-br-none'
-                                            : 'bg-violet-200 rounded-bl-none'
+                                        ? 'bg-violet-300 rounded-br-none'
+                                        : 'bg-violet-200 rounded-bl-none'
                                         }`}
                                 >
                                     <div className="whitespace-pre-wrap">{text || <span className="text-gray-500">[sin contenido]</span>}</div>

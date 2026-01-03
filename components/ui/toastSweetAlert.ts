@@ -16,7 +16,7 @@ export const showPaymentTimerToast = (expiresAtTime: number, pathname: string) =
         timer: expiresAtTime - Date.now(),
         timerProgressBar: true,
         toast: true,
-        position: 'bottom-end',
+        position: 'bottom-start',
         showConfirmButton: pathname === '/carrito' ? false : true,
         confirmButtonText: 'Gestionar',
         confirmButtonColor: '#8b5cf6', // Violeta

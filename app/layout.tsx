@@ -5,6 +5,7 @@ import { Comic_Neue } from "next/font/google";
 import CartSidebar from '@/components/CartSidebar';
 import { createClient } from "@/utils/supabase/server";
 import PaymentTimerListener from '@/components/PaymentTimerListener';
+import WhatsAppButton from '@/components/WhatsAppButton';
 
 export const metadata = {
     title: 'Alquimara',
@@ -28,9 +29,17 @@ export default async function Layout({ children }: { children: React.ReactNode }
                 <Navbar user={user} />
                 <main className="pt-24 flex-1 bg-white">{children}</main>
                 <CartSidebar user={user} />
-                <footer className="bg-gray-800 text-white py-4 text-center">
-                    &copy; {currentYear} Alquimara. Todos los derechos reservados.
-                </footer>
+                <div className="hidden md:block">
+                    <footer className="bg-gray-800 text-white py-4 text-center">
+                        &copy; {currentYear} Alquimara. Todos los derechos reservados.
+                    </footer>
+                </div>
+                <div className="md:hidden">
+                    <footer className="bg-gray-800 text-white py-4 text-center pb-20">
+                        &copy; {currentYear} Alquimara. Todos los derechos reservados.
+                    </footer>
+                </div>
+                <WhatsAppButton />
             </body>
         </html>
     );
