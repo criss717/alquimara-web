@@ -7,6 +7,7 @@ import Image from "next/image";
 import type { User } from "@supabase/supabase-js";
 import LocalGroceryStoreIcon from '@mui/icons-material/LocalGroceryStore';
 import { useCartStore } from "@/store/cartStore";
+import UserMenu from "./UserMenu";
 
 type NavbarProps = {
     user: User | null;
@@ -77,15 +78,7 @@ const Navbar = ({ user }: NavbarProps) => {
                         </li>
                     ) : (
                         <li>
-                            <form action={signOutAction}>
-                                <button
-                                    type="submit"
-                                    className="hover:text-gray-300 transition duration-300 cursor-pointer"
-                                    onClick={() => setUserID('')}
-                                >
-                                    Salir
-                                </button>
-                            </form>
+                            <UserMenu user={user} />
                         </li>
                     )
                     }

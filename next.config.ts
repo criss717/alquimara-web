@@ -9,6 +9,10 @@ const nextConfig: NextConfig = {
         hostname: "liuhsbsujfxoxmkhehtr.supabase.co",
         pathname: "/storage/v1/object/public/imagenes-jabones/**",
       },
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+      },
     ],
   },
 };
