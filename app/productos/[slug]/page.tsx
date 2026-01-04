@@ -73,7 +73,7 @@ export default async function ProductDetail({ params }: { params: { slug: string
                     <h1 className="text-2xl font-extrabold mb-3">{product.name}</h1>
                     <div className="flex items-center gap-4 mb-4">
                         <p className="text-2xl font-bold text-gray-900">{product.price}€</p>
-                        <p className="text-sm text-gray-600">Stock: {product.stock}</p>
+                        <p className={`text-sm text-gray-600 ${product.stock == 0 ? 'text-red-600' : ''}`}>Stock: {product.stock}</p>
                     </div>
 
                     <div className="mb-6 prose max-w-none text-gray-700">
@@ -95,7 +95,7 @@ export default async function ProductDetail({ params }: { params: { slug: string
                     )}
 
                     <div className="flex flex-wrap gap-3 items-center">
-                        <AddToCartButton id={product.id} />
+                        <AddToCartButton id={product.id} stock={product.stock} />
                         <Link href="/productos" className="inline-block bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition">
                             Ver todos los productos
                         </Link>

@@ -31,9 +31,9 @@ export default async function LoginPage() {
         <button
           type="submit"
           formAction={login}
-          className="bg-blue-500 text-white rounded p-2 hover:bg-blue-600 cursor-pointer"
+          className="bg-violet-500 text-white rounded p-2 hover:bg-blue-600 cursor-pointer"
         >
-          Login
+          Ingresar
         </button>
         <GoogleSignInButton />
       </form>

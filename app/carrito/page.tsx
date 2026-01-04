@@ -85,7 +85,10 @@ export default function CarritoPage() {
     useEffect(() => {
         if (success) {
             const seleccionados = JSON.parse(localStorage.getItem("seleccionados") || "[]");
-            const orderId = localStorage.getItem("orderId");
+            // Priorizamos el order_id que viene de Stripe (URL), si no, fallback a local.
+            const urlOrderId = searchParams.get("order_id");
+            const orderId = urlOrderId || localStorage.getItem("orderId");
+
             clearCart(seleccionados);
             setProductos([]);
 

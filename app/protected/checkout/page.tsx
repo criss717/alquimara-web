@@ -90,9 +90,28 @@ const CheckoutPage = () => {
             const res = await fetch("/api/checkout", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ cart: productos, shippingCost: totalEnvio }),
+                body: JSON.stringify({ orderId: order.id }), // SOLO enviamos el ID de la orden
             });
-            const data = await res.json();
+
+            let data;
+            try {
+                const text = await res.text();
+                // Intentar parsear si parece JSON
+                try {
+                    data = JSON.parse(text);
+                } catch {
+                    console.error("Respuesta no válida del servidor (HTML espera JSON):", text);
+                    throw new Error(`Error del servidor: ${res.status} ${res.statusText}`);
+                }
+
+                if (!res.ok) {
+                    throw new Error(data?.error || "Error en el servidor de checkout");
+                }
+            } catch (err) {
+                console.error("Error interpretando respuesta:", err);
+                throw err;
+            }
+
             if (data.url) {
                 // Guardar en localStorage para limpiar después
                 localStorage.setItem("seleccionados", JSON.stringify(seleccionados));
@@ -106,32 +125,6 @@ const CheckoutPage = () => {
             console.error('Error en pago:', error);
             await sweetAlert('Error', 'Error al procesar el pago. Intenta de nuevo.', 'error', 3000);
             setIsProcessing(false);
-        }
-    };
-
-    /**
-     * Cancelar orden pendiente
-     */
-    const handleCancelOrder = async () => {
-        if (!window.confirm('¿Deseas cancelar este pago? Se perderá el carrito actual.')) return;
-
-        try {
-            const res = await fetch('/api/orders/retake', { method: 'DELETE' });
-            const json = await res.json().catch(() => ({}));
-            if (res.ok) {
-                // limpiar localStorage y estado
-                localStorage.removeItem('orderId');
-                localStorage.removeItem('seleccionados');
-                await sweetAlert('Cancelado', 'Pago cancelado. Volviendo al carrito...', 'success', 2000);
-                router.push('/carrito');
-            } else {
-                const serverMsg = json?.error || 'Error al cancelar el pago.';
-                console.error('Cancel failed:', serverMsg);
-                await sweetAlert('Error', serverMsg, 'error', 4000);
-            }
-        } catch (error) {
-            console.error('Error canceling order:', error);
-            await sweetAlert('Error', 'Error al cancelar.', 'error', 3000);
         }
     };
 

@@ -53,6 +53,7 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
       {/* Botón de página anterior */}
       <Link
         href={createPageURL(currentPage - 1)}
+        scroll={false}
         className={`p-2 rounded-md ${currentPage <= 1 ? 'pointer-events-none text-gray-400' : 'hover:bg-gray-200'}`}
         aria-disabled={currentPage <= 1}
       >
@@ -64,10 +65,10 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
         <Link
           key={`${page}-${index}`}
           href={createPageURL(page)}
-          className={`px-4 py-2 rounded-md text-sm ${
-            page === '...' ? 'pointer-events-none' :
-            currentPage === page ? 'bg-black text-white' : 'hover:bg-gray-200'
-          }`}
+          scroll={false}
+          className={`px-4 py-2 rounded-md text-sm ${page === '...' ? 'pointer-events-none' :
+              currentPage === page ? 'bg-black text-white' : 'hover:bg-gray-200'
+            }`}
         >
           {page}
         </Link>
@@ -76,6 +77,7 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
       {/* Botón de página siguiente */}
       <Link
         href={createPageURL(currentPage + 1)}
+        scroll={false}
         className={`p-2 rounded-md ${currentPage >= totalPages ? 'pointer-events-none text-gray-400' : 'hover:bg-gray-200'}`}
         aria-disabled={currentPage >= totalPages}
       >

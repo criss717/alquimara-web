@@ -21,7 +21,7 @@ $$ language plpgsql;
 -- Mantenemos el cron activo
 select cron.schedule(
   'cancel-expired-orders',
-  '*/10 * * * *', 
+  '*/120 * * * *', 
   $$select cancel_expired_orders()$$
 );
 

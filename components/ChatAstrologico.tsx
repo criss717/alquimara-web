@@ -103,11 +103,11 @@ export default function ChatAstrologico() {
             if (!chatIdFromUrl) {
                 const lastActive = loadLastActiveChatId();
                 if (lastActive) {
-                    router.replace(`/?id=${lastActive}`);
+                    router.replace(`/?id=${lastActive}`, { scroll: false });
                     setCurrentChatId(lastActive);
                 } else {
                     const newChatId = uuidv4();
-                    router.replace(`/?id=${newChatId}`);
+                    router.replace(`/?id=${newChatId}`, { scroll: false });
                     setCurrentChatId(newChatId);
                     saveLastActiveChatId(newChatId);
                 }

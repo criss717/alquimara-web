@@ -56,7 +56,7 @@ export default function CartSidebar({ user }: CartProps) {
     }, [cart, supabase]);
 
     return (
-        <aside className={`fixed overflow-y-hidden right-0 top-0 w-[200px] bg-white h-full shadow-lg z-50 p-4 ${showCart && cart.length > 0 ? "block" : "hidden"} ${url.startsWith('/productos') || url == '/' ? "block" : "hidden"}`}>
+        <aside className={`fixed overflow-y-auto right-0 top-0 w-[200px] bg-white h-full shadow-lg z-50 p-4 ${showCart && cart.length > 0 ? "block" : "hidden"} ${url.startsWith('/productos') || url == '/' ? "block" : "hidden"}`}>
             <div className="w-full flex flex-col justify-between items-center mb-4 gap-2">
                 <div className="flex justify-evenly w-full">
                     <h2 className="font-bold text-xl">Sub total</h2>

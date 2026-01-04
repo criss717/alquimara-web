@@ -43,7 +43,7 @@ export default function FilterComponent({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [category, selectedProps])
 
-    const updateUrl = useCallback ((params: { [k: string]: string | undefined }) => {
+    const updateUrl = useCallback((params: { [k: string]: string | undefined }) => {
         const paramsObj = new URLSearchParams(Array.from(searchParams.entries()))
         // Seteo o elimino parámetros según el valor
         Object.entries(params).forEach(([k, v]) => {
@@ -51,7 +51,7 @@ export default function FilterComponent({
             else paramsObj.delete(k)
         })
         const qs = paramsObj.toString()
-        router.push(qs ? `${pathname}?${qs}` : pathname)
+        router.push(qs ? `${pathname}?${qs}` : pathname, { scroll: false })
     }, [pathname, router, searchParams])
 
     const onPropertyToggle = (prop: string) => {
@@ -81,7 +81,7 @@ export default function FilterComponent({
                         page: '1',
                         precios: undefined
                     });
-                  
+
                 }} />
             </div>
 
@@ -113,7 +113,7 @@ export default function FilterComponent({
             </div>
 
             <div className="mb-6">
-                <PriceRangeSlider min={precios.minPrice} max={precios.maxPrice} step={1}  />
+                <PriceRangeSlider min={precios.minPrice} max={precios.maxPrice} step={1} />
             </div>
         </aside>
     )

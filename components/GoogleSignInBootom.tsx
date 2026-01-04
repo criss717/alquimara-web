@@ -34,7 +34,7 @@ export function GoogleSignInButton() {
         width={20}
         height={20}
       />
-      <span>  Sign in with Google</span>
+      <span>  Ingresar con Google</span>
     </button>
   );
 }

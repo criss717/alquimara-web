@@ -22,7 +22,7 @@ export default function SortComponent() {
   const handleSortChange = (value: string) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set('sort', value);
-    router.push(`${pathname}?${params.toString()}`);
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
   return (
@@ -33,11 +33,10 @@ export default function SortComponent() {
           <button
             key={option.value}
             onClick={() => handleSortChange(option.value)}
-            className={`px-4 py-2 text-sm rounded-lg transition-colors cursor-pointer ${
-              currentSort === option.value
+            className={`px-4 py-2 text-sm rounded-lg transition-colors cursor-pointer ${currentSort === option.value
                 ? 'bg-black text-white'
                 : 'bg-white text-black border border-gray-300 hover:bg-gray-100'
-            }`}
+              }`}
           >
             {option.label}
           </button>

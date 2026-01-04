@@ -1,6 +1,7 @@
-export interface CartItem {    
-    id: string;    
-    quantity : number; // Añadido para manejar la cantidad en el carrito
+export interface CartItem {
+    id: string;
+    quantity: number; // Añadido para manejar la cantidad en el carrito
+    stock?: number;
 }
 
 export interface CartCompleto {
