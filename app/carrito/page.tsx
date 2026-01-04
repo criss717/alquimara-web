@@ -91,18 +91,8 @@ export default function CarritoPage() {
 
             clearCart(seleccionados);
             setProductos([]);
-
-            const updateOrder = async (orderId: string | null) => {
-                const { error: updateError } = await supabase
-                    .from('orders')
-                    .update({ status: 'paid' })
-                    .eq('id', orderId);
-
-                if (updateError) {
-                    console.error('Error updating order status:', updateError);
-                }
-            }
-            updateOrder(orderId);
+            // NUNCA actualizamos el estado 'paid' desde el frontend. 
+            // Esto lo hará el Webhook de Stripe de forma segura.
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [success, canceled]);

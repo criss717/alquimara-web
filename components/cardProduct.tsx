@@ -5,7 +5,7 @@ import Link from "next/link";
 import AddToCartButton from "./ui/addToCartButton";
 import CardProductProps from "@/types/cardProductProps";
 
-export default function CardProduct({ imageUrl, name, price, id, slug }: CardProductProps) {
+export default function CardProduct({ imageUrl, name, price, id, slug, stock }: CardProductProps) {
 
     return (
         <Link href={`/productos/${encodeURIComponent(slug)}`}>
@@ -23,6 +23,7 @@ export default function CardProduct({ imageUrl, name, price, id, slug }: CardPro
                 <p className="text-sm text-gray-600">{price}€</p>
                 <AddToCartButton
                     id={id}
+                    stock={stock ? stock : 0}
                 />
             </div>
         </Link>
